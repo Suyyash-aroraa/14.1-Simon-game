@@ -30,48 +30,50 @@ function randomSeries(){
     press(item)
     return item
 }
+function pressEvent(inSeries) {
+    for (var i = 1; i < 5; i++) {
 
+        let item = "#a" + i;
+        if (item == inSeries) {
+            $(item).click(
+                function () {
+                    $(item).addClass("pressed");
+                    setTimeout(() => {
+                        $(item).removeClass("pressed");
+                    }, "200")
+                    press(item)
+                }
+            )
+        }
+        else {
+            $(item).click(
+                function () {
+                    $(item).addClass("pressed");
+                    setTimeout(() => {
+                        $(item).removeClass("pressed");
+                    }, "200")
+                    press(item)
+                    $("body").css("background-color", "red")
+                    $('*').on('keyup keydown');
+                    $('h1').text('GAME OVER, Try again')
+                }
+            )
+        }
+    }
+}
 $('body').keydown(
-    function (){
+    function (key){
         $("body").css("background-color", "rgb(27, 27, 80)")
         $('*').off('keyup keydown');
+        console.log(key.originalEvent.key);
         $("h1").text("Simon Game");
+        var count = 1;
         var listBtn = [];
-        var loop = 1;
         while (loop == 1){
             let p = randomSeries()
             listBtn.push(p)
-            for (var i2 = 0; i2<listBtn.length; i2++)
-                for (var i = 1; i < 5; i++) {
-
-                    let item = "#a" + i;
-                    if (item == listBtn[i2]) {
-                        $(item).click(
-                            function () {
-                                $(item).addClass("pressed");
-                                setTimeout(() => {
-                                    $(item).removeClass("pressed");
-                                }, "200")
-                                press(item)
-                            }
-                        )
-                    }
-                    else {
-                        $(item).click(
-                            function () {
-                                $(item).addClass("pressed");
-                                setTimeout(() => {
-                                    $(item).removeClass("pressed");
-                                }, "200")
-                                press(item)
-                                $("body").css("background-color", "red")
-                                $('*').on('keyup keydown');
-                                $('h1').text('GAME OVER, Try again')
-                                loop = 0
-                            }
-                        )
-                    }
-                }
+            for (var i2 = 0; i2<listBtn.length; i++)
+               pressEvent(listBtn[i2])
         }
     }
 )
