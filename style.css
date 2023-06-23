@@ -1,0 +1,50 @@
+body{
+    background-color: rgb(27, 27, 80);
+}
+h1{
+    display: flex;
+    justify-content: center;
+    color: yellow;
+    font-size: 2.5rem;
+    font-family: 'Press Start 2P';
+}
+.flex{
+    margin-top: 20vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.btn{
+    width: 30vh;
+    height: 30vh;
+    border: 6px solid;
+    border-radius: 25%;
+}
+.btn-carr{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+#a1{
+    background-color: red;
+}
+#a2{
+    background-color: green;
+}
+#a3{
+    background-color: blue;
+}
+#a4{
+    background-color: yellow;
+}
+.pressed{
+    box-shadow: 4px 3px 3px gray;
+    opacity: 50%;
+    border: 6px solid gray;
+}
+.added{
+    opacity: 50%;
+}
