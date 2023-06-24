@@ -2,6 +2,7 @@ var gamePattern = []
 var userPattern = []
 
 var currentLevel = 1
+var started = false
 
 
 var colorPattern = ['green', 'red', 'blue', 'yellow']
@@ -57,32 +58,31 @@ function checkAnswer(Level){
         }
     }
     else{
-        gamePattern = []
-        userPattern = []
-        currentLevel = 1
         $('h1').text("game over, press any key to restart.")
         $('body').addClass('gameOver')
         playMusic('wrong')
-        $('body').on($('body').on('keydown', function(){
-            $('body').off('keydown')
-            var check = $('body').attr('class');
-            if (check === 'gameOver'){
-                $('body').removeClass('gameOver');
-            }
-            nextSequence();
-            clicked();
-        }))
+        gamePattern =[]
+        userPattern = []
+        startOver()
     }
 }
 
 
 
 $('body').on('keydown', function(){
-    $('body').off('keydown')
-    var check = $('body').attr('class');
-    if (check === 'gameOver'){
-        $('body').removeClass('gameOver');
+    if (!started){
+        var check = $('body').attr('class');
+        if (check === 'gameOver'){
+            $('body').removeClass('gameOver');
+        }
+        nextSequence();
+        clicked();
+        started = true;
     }
-    nextSequence();
-    clicked();
 })
+
+function startOver() {
+    currentLevel = 1;
+    gamePattern = [];
+    started = false;
+  }
