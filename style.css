@@ -28,16 +28,16 @@ h1{
     grid-template-columns: 1fr 1fr;
     gap: 10px;
 }
-#a1{
+#red{
     background-color: red;
 }
-#a2{
+#green{
     background-color: green;
 }
-#a3{
+#blue{
     background-color: blue;
 }
-#a4{
+#yellow{
     background-color: yellow;
 }
 .pressed{
@@ -47,4 +47,8 @@ h1{
 }
 .added{
     opacity: 50%;
+}
+.gameOver{
+    background-color: red;
+    color: white;
 }

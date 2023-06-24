@@ -1,79 +1,88 @@
-function press(item) {
-    switch (item) {
-        case "#a1":
-            let red = new Audio("sounds/red.mp3")
-            red.play()
-            break;
-        case "#a2":
-            let green = new Audio("sounds/green.mp3")
-            green.play()
-            break;
-        case "#a3":
-            let blue = new Audio("sounds/blue.mp3")
-            blue.play()
-            break;
-        case "#a4":
-            let yellow = new Audio("sounds/yellow.mp3")
-            yellow.play()
-            break;
-        default:
-            break;
-    }
-}
-function randomSeries(){
-    var rand = Math.floor((Math.random() * 4) + 1)
-    let item = "#a" + rand
-    $(item).addClass("added");
-    setTimeout(() => {
-        $(item).removeClass("added");
-    }, "300");
-    press(item)
-    return item
-}
-function pressEvent(inSeries) {
-    for (var i = 1; i < 5; i++) {
+var gamePattern = []
+var userPattern = []
 
-        let item = "#a" + i;
-        if (item == inSeries) {
-            $(item).click(
-                function () {
-                    $(item).addClass("pressed");
-                    setTimeout(() => {
-                        $(item).removeClass("pressed");
-                    }, "200")
-                    press(item)
-                }
-            )
+var currentLevel = 1
+
+
+var colorPattern = ['green', 'red', 'blue', 'yellow']
+function nextSequence(){
+    userPattern = []
+    $('h1').text("Level " + currentLevel)
+    var rand = Math.floor(Math.random() * 4);
+    var randomColor = colorPattern[rand];
+    gamePattern.push(randomColor);
+    var randomId = '#' + randomColor;
+    console.log(rand + ' ' + randomColor + '' + gamePattern )
+    flashAnimattion(randomId)
+    playMusic(randomColor)
+    currentLevel++
+}
+
+function flashAnimattion(idGiven){
+    $(idGiven).fadeOut(100).fadeIn(100);
+}
+function pressAnimation(idGiven){
+    $(idGiven).addClass("pressed")
+    setTimeout(() => {
+        $(idGiven).removeClass("pressed")
+    }, "100")
+}
+
+function playMusic(colorProvided){
+    var aud = new Audio("sounds/" + colorProvided + '.mp3')
+    aud.play()
+}
+
+function clicked(){
+    $(".btn").click(
+        function(){
+            var clickedId = $(this).attr("id")
+            userPattern.push(clickedId)
+            console.log(userPattern + '  ' + gamePattern)
+            pressAnimation('#' + clickedId)
+            playMusic(clickedId)
+            checkAnswer(userPattern.length - 1)
+            
         }
-        else {
-            $(item).click(
-                function () {
-                    $(item).addClass("pressed");
-                    setTimeout(() => {
-                        $(item).removeClass("pressed");
-                    }, "200")
-                    press(item)
-                    $("body").css("background-color", "red")
-                    $('*').on('keyup keydown');
-                    $('h1').text('GAME OVER, Try again')
-                }
-            )
+    )
+}
+
+function checkAnswer(Level){
+    if (gamePattern[Level] === userPattern[Level]){
+        if (userPattern.length === gamePattern.length){
+            setTimeout(function(){
+                nextSequence()
+                console.log('right')
+            }, '500')
         }
+    }
+    else{
+        gamePattern = []
+        userPattern = []
+        currentLevel = 1
+        $('h1').text("game over, press any key to restart.")
+        $('body').addClass('gameOver')
+        playMusic('wrong')
+        $('body').on($('body').on('keydown', function(){
+            $('body').off('keydown')
+            var check = $('body').attr('class');
+            if (check === 'gameOver'){
+                $('body').removeClass('gameOver');
+            }
+            nextSequence();
+            clicked();
+        }))
     }
 }
-$('body').keydown(
-    function (key){
-        $("body").css("background-color", "rgb(27, 27, 80)")
-        $('*').off('keyup keydown');
-        console.log(key.originalEvent.key);
-        $("h1").text("Simon Game");
-        var count = 1;
-        var listBtn = [];
-        while (loop == 1){
-            let p = randomSeries()
-            listBtn.push(p)
-            for (var i2 = 0; i2<listBtn.length; i++)
-               pressEvent(listBtn[i2])
-        }
+
+
+
+$('body').on('keydown', function(){
+    $('body').off('keydown')
+    var check = $('body').attr('class');
+    if (check === 'gameOver'){
+        $('body').removeClass('gameOver');
     }
-)
+    nextSequence();
+    clicked();
+})
